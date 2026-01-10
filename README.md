@@ -45,7 +45,7 @@ The final output is a 6-layer Transformer that generates a continuous coordinate
 
 <p align="center"><img width="645" height="510" alt="image" src="https://github.com/user-attachments/assets/786ddb24-5fc4-4011-9d78-e5b3e60b7950" /> </p>
 
-This model, yielding an average RMSE of 9.05 yards, a Huber Loss of 8.61 yards at the 2.2-second mark, and a median RMSE of 6.2 yards for peak-accuracy frames, performs within a competitive margin of these industry leaders. Notably, SOTA models are typically trained on the full proprietary Next Gen Stats (NGS)
+This model, yielding an average RMSE of 9.05 yards, a Huber Loss of 8.61 yards for all frames and a median RMSE of 6.2 yards for peak-accuracy frames, performs within a competitive margin of these industry leaders. Notably, SOTA models are typically trained on the full proprietary Next Gen Stats (NGS)
 corpus—approximately 8x more data than was available for this study—and incorporate high-resolution features such as throwing direction and player-specific 'speed signatures' + player context. While I am satisfeid that the model captures the primary spatial intent of the play within a 6-yard radius
 during the high-entropy window of the pocket collapse, I believe that closing the remaining gap would require the integration of the broader contextual datasets used by the NFL’s primary analytics partners. In order to further break down model performance, I investigated whether the model could accurately
 predict where the ball would be thrown much earlier before the quarterback gets in his throwing motion to see if there were signs or tendencies of whether the defense could learn from the model and defend against certain plays better. 
