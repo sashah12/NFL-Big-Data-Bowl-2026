@@ -24,7 +24,6 @@ class PlaySequenceDataset(Dataset):
         X = torch.tensor(play_df[self.feature_cols].values, dtype=torch.float32)
         
         # Extract the 5 position IDs from the first frame (Static for the play)
-        # Ensure these are integers for the Embedding layer
 
         off_ids = torch.tensor(play_df[self.off_pos_cols].iloc[0].values, dtype=torch.long)
         def_ids = torch.tensor(play_df[self.def_pos_cols].iloc[0].values, dtype=torch.long)
@@ -37,7 +36,6 @@ class PlaySequenceDataset(Dataset):
         deep_routes = [0, 1, 4, 9] 
         weight = 2.0 if route_int in deep_routes else 1.0
         # --- Inside PlaySequenceDataset.__getitem__ ---
-        # Define your weighting strategy (2025 Standard)
         result_map = {
             'C': 1.2,   # Focus more on high-precision successful trajectories
             'I': 0.8,   
@@ -45,10 +43,8 @@ class PlaySequenceDataset(Dataset):
 
         }
         pass_result = play_df["pass_result"].iloc[0]
-        # Use .get() to provide a default weight of 1.0 for unknown results
         result_weight = result_map.get(pass_result, 1.0)
         
-        # Combine this with your existing route-based weight (e.g., 1.5 for deep)
         # Total weight = Route Difficulty * Play Result Importance
         final_weight = weight * result_weight 
         return X, off_ids, def_ids, y, torch.tensor(weight, dtype=torch.float32)

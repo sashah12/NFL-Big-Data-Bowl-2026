@@ -4,25 +4,22 @@ import torch.nn.functional as F
 import pandas as pd
 from torch.utils.data import DataLoader
 
-from dataset import PlaySequenceDataset, collate_fn  # <-- your dataset
-from transf import PlayTransformer                    # <-- your transformer model
+from dataset import PlaySequenceDataset, collate_fn  # <-- dataset
+from transf import PlayTransformer                    # <-- transformer model
 from torch.optim.lr_scheduler import OneCycleLR
 
 def main(FEATURES):
 
-    # ==============================
-    # CONFIG
-    # ==============================
     PQ_PATH = "train_df_scaled.parquet"
     
     DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
 
-    BATCH_SIZE = 64               # Higher batch size provides more stable gradients for Transformers
-    EPOCHS = 20                   # 8 is likely too low for 400k rows to converge
-    LR = 1e-4                     # Slightly lower initial LR is safer for Transformers with many features
-    ACCUM_STEPS = 2               # Effective batch = 128 (64 * 2)
-    WEIGHT_DECAY = 0.10           # Essential for AdamW to prevent overfitting 470 features
-    WARMUP_STEPS = 1000           # Transformers need a warmup period to prevent gradient spikes
+    BATCH_SIZE = 64               
+    EPOCHS = 20                  
+    LR = 1e-4                     
+    ACCUM_STEPS = 2               
+    WEIGHT_DECAY = 0.10           
+    WARMUP_STEPS = 1000           
     NUM_WORKERS = 0   
     CHECKPOINT_EVERY = 5
 
@@ -30,7 +27,7 @@ def main(FEATURES):
     # total_steps = (len(train_loader) // ACCUM_STEPS) * EPOCHS
 
     # ==============================
-    # 1. SETUP DATA (Needs to be first so scheduler knows len(train_loader))
+    # 1. SETUP DATA 
     train_dataset = PlaySequenceDataset(PQ_PATH, FEATURES, ['off1_player_position_idx', 'off2_player_position_idx', 'off3_player_position_idx', 
                                                             'off4_player_position_idx', 'off5_player_position_idx'], ['def1_player_position_idx', 
                                                             'def2_player_position_idx', 'def3_player_position_idx', 'def4_player_position_idx', 
@@ -41,22 +38,22 @@ def main(FEATURES):
         train_dataset,
         batch_size=BATCH_SIZE,
         shuffle=True,
-        num_workers=NUM_WORKERS, # Use the variable you defined in CONFIG
-        pin_memory=True,         # Recommended for GPU training
+        num_workers=NUM_WORKERS, 
+        pin_memory=True,         
         collate_fn=collate_fn
     )
 
     # 2. SETUP MODEL
     model = PlayTransformer(continuous_dim=len(FEATURES)).to(DEVICE)
 
-    # 3. SETUP OPTIMIZER (Must be before scheduler)
+    # 3. SETUP OPTIMIZER 
     optimizer = torch.optim.AdamW(
         model.parameters(), 
         lr=LR, 
         weight_decay=WEIGHT_DECAY
     )
     
-    # 4. SETUP SCHEDULER (Now it can access optimizer and train_loader)
+    # 4. SETUP SCHEDULER 
     scheduler = OneCycleLR(
         optimizer, 
         max_lr=3e-4, 
@@ -77,7 +74,7 @@ def main(FEATURES):
         total_ball_loss_rmse = 0
         batches = 0
         # 1. Initialize Huber Loss outside the loop
-        # delta=1.5 treats errors > 1.5 yards linearly (prevents gradient spikes)
+        # delta=1 treats errors > 1 yards linearly (prevents gradient spikes)
         huber_fn = torch.nn.HuberLoss(delta=1.0, reduction='none')
         
         for i, (X, off_ids, def_ids, mask, ball_target, weight) in enumerate(train_loader):
@@ -103,7 +100,6 @@ def main(FEATURES):
                 raw_huber = huber_fn(preds, target_expanded).mean(dim=-1)
                 
                 # Apply boundary weight and mask
-                # Note: 'weight' here is your route-based weight (e.g., 1.5 for deep)
                 weighted_huber = (raw_huber * mask.float()) * (weight * b_weight).unsqueeze(1)
         
                 # --- 4. TWO-HEADED TASK SEPARATION ---
@@ -112,7 +108,7 @@ def main(FEATURES):
                 std_mask = (weight <= 1.0).unsqueeze(1) * mask.float()
         
                 # Calculate mean Huber loss per task head
-                # We use 1e-8 for numerical stability in case a batch has 0 deep routes
+                # Use 1e-8 for numerical stability in case a batch has 0 deep routes
                 loss_deep = weighted_huber[deep_mask.bool()].mean() if deep_mask.sum() > 0 else torch.tensor(0.0, device=DEVICE)
                 loss_std = weighted_huber[std_mask.bool()].mean() if std_mask.sum() > 0 else torch.tensor(0.0, device=DEVICE)
         
@@ -122,13 +118,13 @@ def main(FEATURES):
                 loss = loss_ball / ACCUM_STEPS
         
                         # --- 5. MONITORING METRICS (RMSE) ---
-                        # We calculate RMSE for your logs, but do NOT backpropagate it
+                        # Calculate RMSE for logs, but do NOT backpropagate it
                 with torch.no_grad():
                     # Calculate per-frame MSE for the entire batch
                     raw_mse = F.mse_loss(preds, target_expanded, reduction='none').mean(dim=-1)
                     
                     # Apply masks to get metrics for specific play types
-                    # We average only over valid (unmasked) frames
+                    # Average only over valid (unmasked) frames
                     current_rmse_deep = torch.sqrt((raw_mse * deep_mask).sum() / (deep_mask.sum() + 1e-8))
                     current_rmse_std = torch.sqrt((raw_mse * std_mask).sum() / (std_mask.sum() + 1e-8))
                     
@@ -147,13 +143,11 @@ def main(FEATURES):
                 scheduler.step()
         
             # --- 7. ACCUMULATE LOGS ---
-            # Use .item() on the scalar averages we calculated above
             total_ball_loss += loss_ball.item()
             total_ball_loss_rmse += current_rmse_global.item()
             
             batches += 1
         
-        # Print with more detail to monitor your specific "Deep Ball" problem
         print(f"Epoch {epoch}/{EPOCHS} | "f"Avg Huber Loss={total_ball_loss/batches:.4f} | "f"Global RMSE={total_ball_loss_rmse/batches:.4f}")
         
         if epoch % CHECKPOINT_EVERY == 0:
@@ -161,14 +155,6 @@ def main(FEATURES):
             print(f"💾 Saved checkpoint: model_epoch{epoch}.pt\n")
 
 if __name__ == "__main__":
-    # Define FEATURES list here (using the corrected list generation method)
-
-    # targets = ['ball_land_x', 'ball_land_y', 'route_of_targeted_receiver_int']
-    # metadata = ['game_id', 'play_id', 'frame_id', 'week']
-    # # 2. Slice the DataFrame based on Week 15 split (Standard 2025 NFL Analytics approach)
-    # id_cols = ['qb_nfl_id', 'off1_nfl_id', 'off2_nfl_id', 'off3_nfl_id', 'off4_nfl_id', 'off5_nfl_id',
-    #  'def1_nfl_id', 'def2_nfl_id', 'def3_nfl_id', 'def4_nfl_id', 'def5_nfl_id', 'def6_nfl_id', 
-    #  'def7_nfl_id', 'def8_nfl_id', 'def9_nfl_id', 'def10_nfl_id', 'def11_nfl_id']
     
     FEATURES = ['off3_cb_x_early_initial', 'off3_lb_x_early_initial',
        'off4_lb_x_early_initial', 'off2_lb_x_early_initial',

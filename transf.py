@@ -34,7 +34,7 @@ class PlayTransformer(nn.Module):
         self.def_pos_embedding = nn.Embedding(num_positions, embed_dim)
         
         # New input dimension: 
-        # Continuous (400+) + Offense (5*8=40) + Defense (11*8=88)
+        # Continuous (170+) + Offense (5*8=40) + Defense (11*8=88)
         combined_input_dim = continuous_dim + (5 * embed_dim) + (11 * embed_dim)
         self.in_proj = nn.Linear(combined_input_dim, d_model)
 
