@@ -90,8 +90,8 @@ Core identity: ARI’s confident ANGLE routes come when:
 
 Players with the top Model confidence rate by offensive position when they are predicted to be targeted
 
-Model Confident Player Targets vs Player Non Targets Baseline
-   
+<a href="https://github.com/sashah12/NFL-Big-Data-Bowl-2026/blob/main/Model%20Confident%20Player%20Targets%20vs.%20Player%20Non-Targets%20Baseline%20Tendencies.PNG">Model Confident Player Targets vs Player Non Targets Baseline</a>
+
 1. Dallas Goedert (Eagles TE - Position 2, FLAT Route)
 Goedert's primary tell is an immediate change in spatial relationships and directional commitment in the 0-40% window.
 Insight 1: The "Burst" Signal (0-40%): The rate at which Goedert increases his separation (off2_def_proximity) from the nearest defender in the first 0.5s to 2.0s is significantly faster (+3.5 yards/sec faster rate of separation gain) on targeted plays than when he runs a decoy route.
@@ -117,7 +117,8 @@ Insight 1: Depth Manipulation (0-40%): The rate at which he manipulates defender
 Insight 2: Boundary Pressure Rate: The change in his boundary proximity is faster when targeted, indicating he instantly bursts toward the sideline boundary constraint.
 Defensive Gameplan: Disguise defensive depth. Do not give a consistent shallow-coverage look post-snap, which forces the QB to verify Nacua's intent and slows down the play development.
 
-Model Confident Player Targets vs. League Targets Baseline
+
+<a href="https://github.com/sashah12/NFL-Big-Data-Bowl-2026/blob/main/Model%20Confident%20Player%20Targets%20vs.%20League%20Targets%20Baseline%20Tendencies.PNG">Model Confident Player Targets vs League Targets Baseline</a>
 
 1. Derrick Henry (RB - Position 3, FLAT/SLANT)
 Henry's predictability comes from immediate movement efficiency and visual alignment signals.
