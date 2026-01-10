@@ -30,13 +30,12 @@ Data Filtering and Preprocessing:
   - Feature Engineering: Inputs include velocity vectors, instantaneous acceleration, and "leverage angles"—the relative positioning between a defender and a receiver.
     
 ### Model Architecture
-To simulate the spatial reasoning and decision-making processes inherent in professional football, a Transformer-based architecture was employed. The Transformer’s self-attention mechanism is uniquely suited for this task, as it can weigh the relative importance of all 22 players simultaneously,
-preserving the spatial relationships between offensive threats and defensive counters.
+To simulate the spatial reasoning and decision-making processes inherent in professional football, a Transformer-based architecture was employed. The Transformer’s self-attention mechanism is uniquely suited for this task, as it can weigh the relative importance of all 22 players simultaneously, preserving the spatial relationships between offensive threats and defensive counters.
 
 Key Architectural Features:
-  - High-Dimensional Embeddings: Each player’s state is projected into a higher-dimensional vector space. We implemented distinct positional embeddings for offensive and defensive units to learn the unique movement signatures of different roles (e.g., the burst of a wide receiver versus the backpedal of a cornerback).
+  - High-Dimensional Embeddings: Each player’s state is projected into a higher-dimensional vector space. I implemented distinct positional embeddings for offensive and defensive units to learn the unique movement signatures of different roles (e.g., the burst of a wide receiver versus the backpedal of a cornerback).
   - Temporal History: The model utilizes a "look-back" window of previous frames, allowing the Transformer to interpret changes in velocity and direction as a sequence rather than isolated snapshots.
-  - Loss Function Optimization: We utilized a combination of Huber Loss and Root Mean Square Error (RMSE). Huber Loss was selected for its robustness against outliers (e.g., broken plays), while an exponential ramp penalty was applied to sideline and endzone boundaries to enforce "stay-in-bounds" logic.
+  - Loss Function Optimization: I utilized a combination of Huber Loss and Root Mean Square Error (RMSE). Huber Loss was selected for its robustness against outliers (e.g., broken plays), while an exponential ramp penalty was applied to sideline and endzone boundaries to enforce "stay-in-bounds" logic.
   - Weighting Schema: The training objective was weighted (77% standard / 23% long-ball) and 1.2x on completions, 0.8 on incompletions, and 1.1 on interceptions to prioritize accuracy on high-leverage, deep-field attempts and more accurate throws.
 
 The final output is a 6-layer Transformer that generates a continuous coordinate prediction $[X, Y]$ for each frame, providing a real-time "heat map" of the quarterback's most likely target.
@@ -46,40 +45,39 @@ The final output is a 6-layer Transformer that generates a continuous coordinate
 <p align="center"><img width="645" height="510" alt="image" src="https://github.com/user-attachments/assets/786ddb24-5fc4-4011-9d78-e5b3e60b7950" /> </p>
 
 This model, yielding an average RMSE of 9.05 yards, a Huber Loss of 8.61 yards for all frames and a median RMSE of 6.2 yards for peak-accuracy frames, performs within a competitive margin of these industry leaders. Notably, SOTA models are typically trained on the full proprietary Next Gen Stats (NGS)
-corpus—approximately 8x more data than was available for this study—and incorporate high-resolution features such as throwing direction and player-specific 'speed signatures' + player context. While I am satisfeid that the model captures the primary spatial intent of the play within a 6-yard radius
-during the high-entropy window of the pocket collapse, I believe that closing the remaining gap would require the integration of the broader contextual datasets used by the NFL’s primary analytics partners. In order to further break down model performance, I investigated whether the model could accurately
-predict where the ball would be thrown much earlier before the quarterback gets in his throwing motion to see if there were signs or tendencies of whether the defense could learn from the model and defend against certain plays better. 
+corpus—approximately 8x more data than was available for this study—and incorporate high-resolution features such as throwing direction and player-specific 'speed signatures' + player context. While I am satisfied that the model captures the primary spatial intent of the play within a 6-yard radius
+during the high-entropy window of the pocket collapse, I believe that closing the remaining gap would require the integration of the broader contextual datasets used by the NFL’s primary analytics partners. In order to further break down model performance, I investigated in which scenarios the model could predict ball placement way before the quarterback gets in his throwing motion. This is crucial as the defense can learn and game plan based off early offensive tendencies.
 The next sections discuss in which situations the model does well, spotlight team + route based tendencies, and spotlight player + position + route based tendencies. 
 
 ### Team Based Tendencies based on Route
 I analyzed plays/teams where my prediction model achieved confidence(solved the play/ball location, < 8 yards prediction error, in under 60% of the dropback) versus plays where it remained "Reactive" until close to the throw (avg. 3.00s solution time). Here are the top 3 team + route combinations:
 
-Kansas City GO Route: On average, the model was able to identify where the ball was going within 8 yards on 100% of Kansas City’s GO routes in 1.63 seconds after the snap. The model knew within 0.33 seconds after the snap where the ball was going within 4 yards on 50% of those GO route plays.
+Kansas City GO Route: On average, the model was able to predict ball placement within 8 yards when the targeted receiver was running a Go route in 1.63 seconds after the snap. The model knew within 0.33 seconds after the snap where the ball was going within 4 yards on 50% of those GO routes. This highlights the importance of pre-snap and early post-snap reads, as less emphasis is being placed on them as explain by Kirk Cousins and many others.
 
-Core identity: Kansas City’s confident go routes show up when:
-- The secondary over-rotates and declares leverage early, especially on the targeted outside receiver
-- Corner & Linebacker Orientation Is a Massive Tell
+Core identity: Kansas City’s confident targeted GO routes show up when:
+- The opposing secondary over-rotates and declares leverage early, especially on the targeted outside receiver
+- Opposing Corner & Linebacker Orientation Is a Massive Tell
 - 73% GO balls on first down
 - Second and third-level defenders are compressed laterally and closer to the LOS.
 
-<p align="center"><img width="374" height="330" alt="image" src="https://github.com/user-attachments/assets/c25b90c7-ce42-4366-901a-d334742ca2c3" /> <img width="421" height="370" alt="image" src="https://github.com/user-attachments/assets/8697f1aa-1f68-447a-a61d-3348c75ea33a" /></p>
+<p align="center"><img width="374" height="315" alt="image" src="https://github.com/user-attachments/assets/5f842bcd-ae6c-4aa4-a393-513b9ed87e54" /> <img width="421" height="370" alt="image" src="https://github.com/user-attachments/assets/cabc4ac1-de54-4780-b0b2-697a5bde402e" /></p>
 
 
-Tampa Bay CORNER Route: On average, the model identified the target within 8 yards on 100% of Tampa Bay’s CORNER routes in 1.68 seconds after the snap. The model knew within  0.23 seconds after the snap where the ball was going within 4 yards on 47% of those CORNER route plays.
+Tampa Bay CORNER Route: On average, the model identified the target within 8 yards on 100% of Tampa Bay’s targeted CORNER routes in 1.68 seconds after the snap. The model knew within 0.23 seconds after the snap where the ball was going within 4 yards on 47% of those CORNER routes. This continues to highlight the importance of pre-snap and early post-snap reads.
 
 Core identity: TB’s confident corner routes come when:
-- The flat defender is physically misaligned
+- The opposing flat defender is physically misaligned
 - The defense is over-committed to the run fit and high-low stress concepts.
 - Safeties are stepping into run support or inside zones
 - Targeted Receiver is typically in a tight split and part of either a bunch/stack.
 
-<p align="center"><img width="374" height="315" alt="image" src="https://github.com/user-attachments/assets/78d3d85d-2d20-4983-9068-4d083659d644"/> <img width="421" height="370" alt="image" src="https://github.com/user-attachments/assets/6c7bea03-074c-48c1-80a0-a51f52c0aaff" /></p>
+<p align="center"><img width="374" height="315" alt="image" src="https://github.com/user-attachments/assets/06831b25-28c4-4548-a256-6a6f96576efd"/> <img width="421" height="370" alt="image" src="https://github.com/user-attachments/assets/04722334-3d74-41c2-8bda-8d27138401f6" /></p>
 
-Arizona ANGLE Route: On average, the model identified Arizona’s ANGLE routes within 7.5 yards on 100% of plays in 1.4 seconds. The model knew within 0.39 seconds after the snap where the ball was going within 4.2 yards on 50% of those ANGLE route plays.
+Arizona ANGLE Route: On average, the model identified ball placement on Arizona’s targeted ANGLE routes within 7.5 yards on 100% of plays in 1.4 seconds. The model knew within 0.39 seconds after the snap where the ball was going within 4.2 yards on 50% of those ANGLE route plays. Once again, the model results show that pre snap/early post snap reads should be given more emphasis as they can predict ball placement in such a manner.
 
 Core identity: ARI’s confident ANGLE routes come when:
-- QB does not scan, he almost immediately commits: Absolute orientation magnitude spikes (206.77°), showing a full torso turn.
-- Distance between QB and all elligible receivers jumps higher than non confident predictions.
+- QB does not scan, he almost immediately commits: The change in absolute orientation from the 80% of the dropback to first frame post-snap, spikes (206.77°), showing a full torso turn.
+- Distance between QB and all eligible receivers jumps further in the 0-80% window of the dropback than in non-confident predictions.
 - Eye Contact as an Early Contract: Visual alignment stabilizes almost immediately. WR eye-contact angle jumps to 0.38 and stays stable.
   
 <p align="center"><img width="535" height="462" alt="image" src="https://github.com/user-attachments/assets/8e2fc916-24c0-4697-aa4e-b9f496338306" /></p>
@@ -88,7 +86,7 @@ Core identity: ARI’s confident ANGLE routes come when:
 
 <p align="center"><img width="1542" height="814" alt="image" src="https://github.com/user-attachments/assets/59f6588f-9090-4d9e-bcef-4f25e51090d9" /> </p>
 
-Players with the top Model confidence rate by offensive position when they are predicted to be targeted
+Players with the Highest Pre-Throw Model Confidence rate of Whether they are Targeted
 
 <a href="https://github.com/sashah12/NFL-Big-Data-Bowl-2026/blob/main/Model%20Confident%20Player%20Targets%20vs.%20Player%20Non-Targets%20Baseline%20Tendencies.PNG">Model Confident Player Targets vs Player Non Targets Baseline</a>
 
