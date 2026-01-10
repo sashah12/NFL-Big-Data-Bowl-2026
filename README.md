@@ -8,7 +8,11 @@ As noted by veteran quarterback Kirk Cousins, a fundamental shift occurred as de
 over defensive reaction. While elite quarterbacks, notably Aaron Rodgers, Matthew Stafford, and Joe Burrow, still utilize hybrid methods—blending pre-snap recognition with rapid post-snap processing—this shift toward standardized movement patterns provides a unique opportunity for machine learning. By analyzing the "battlefield" as a dynamic system of 22 interacting agents,
 we can identify latent patterns in player kinematics that signal a quarterback’s intent before the ball is released.
 
-[![Kirk Cousins Ball Knowledge 🧠]([img.youtube.com/shorts/wtut3dFo84k?feature=share])](https://www.youtube.com/shorts/_7xx4X7X4e0)
+<p align="center">
+  <a href=https://www.youtube.com/shorts/wtut3dFo84k>
+    <img src="https://github.com/user-attachments/assets/ab419a6b-0dbb-4d5d-9f22-4f997a71be1a" width="394" height="400" alt="Watch the video">
+  </a>
+</p>
 
 ### Abstract
 This research proposes a predictive framework designed from a defensive perspective to forecast quarterback ball placement during the pre-throw phase of an NFL play. By leveraging high-resolution tracking data, this model aims to assist defensive coaching staffs in quantifying offensive tendencies,
@@ -150,5 +154,3 @@ Overall: His def_proximity_at_0.5s is positive, highlighting that early space is
 
 ### Improvements
 I can still improve the model more, focusing more on reducing outliers on long balls as well as switching from a ball placement prediction to the intended target prediction as throw placement can be affected by incompletions in the training data. Intended target is more practical for NFL usage.
-
-### Summary 
