@@ -2,11 +2,10 @@
 Sahil Shah, _Data Scientist_
 
 ### Introduction
-The modern NFL is an environment of extreme information asymmetry. For a defense, preparation is an exhaustive cycle of film study, tendency analysis, and tactical installation designed to minimize the offensive "edge." However, as offensive strategies evolve to become more deceptive,
-the margin for defensive error has narrowed. Traditionally, quarterback play was predicated on coverage identification—reading single-high versus split-safety shells to determine a "side" of the field. 
-As noted by veteran quarterback Kirk Cousins in the video below, a fundamental shift occurred as defenses became proficient at disguising these shells. This forced an evolution in offensive coaching toward "pure progressions"—a sequential, timing-based read ($1 \to 2 \to 3 \to 4 \to 5$) that prioritizes internal rhythm
-over defensive reaction. While elite quarterbacks, notably Aaron Rodgers, Matthew Stafford, and Joe Burrow, still utilize hybrid methods—blending pre-snap recognition with rapid post-snap processing—this shift toward standardized movement patterns provides a unique opportunity for machine learning. By analyzing the "battlefield" as a dynamic system of 22 interacting agents,
-we can identify latent patterns in player kinematics that signal a quarterback’s intent before the ball is released.
+The modern NFL is an environment of extreme information asymmetry. For a defense, preparation is a cycle of film study, tendency analysis, and tactical installation designed to minimize the offensive "edge." However, as offensive strategies evolve to become more deceptive,
+the margin for defensive error has narrowed. Traditionally, quarterback play was built upon on coverage identification—reading single-high versus split-safety shells to determine a "side" of the field. 
+As noted by veteran quarterback Kirk Cousins in the video below, a fundamental shift occurred as defenses became proficient at disguising these shells. This forced an evolution in offensive coaching toward "pure progressions"—a sequential, timing-based read ($1 \to 2 \to 3 \to 4 \to 5$) that prioritizes the play development
+over defensive reaction. While elite quarterbacks, notably Aaron Rodgers, Matthew Stafford, and Joe Burrow, still utilize hybrid methods—blending pre-snap recognition with rapid post-snap processing—this shift toward standardized movement patterns provides an opportunity for machine learning. By analyzing the complex interactions of all 22 players on the field, this model demonstrates that a quarterback's decision is often visible long before the pass is thrown. Through the analysis of pre-snap variables and early post-snap player movement, as demonstrated by the elite quarterbacks, we can decode the offensive patterns that signal intent, offering a predictive window into the quarterback's decision-making process.
 
 <p align="center">
   <a href=https://www.youtube.com/shorts/wtut3dFo84k>
@@ -17,7 +16,7 @@ we can identify latent patterns in player kinematics that signal a quarterback�
 ### Abstract
 This research proposes a predictive framework designed from a defensive perspective to forecast quarterback ball placement during the pre-throw phase of an NFL play. By leveraging high-resolution tracking data, this model aims to assist defensive coaching staffs in quantifying offensive tendencies,
 identifying positional vulnerabilities, and optimizing situational defensive strategies. Using a multi-layer Transformer architecture, the model maps the spatial relationships of all 22 players to output predicted target coordinates ($X, Y$).
-The results demonstrate that the modern shift toward pure progression-based passing inadvertently creates new predictive signals. Because offensive timing is so rigid, pre-snap alignment and early post-snap kinematics (0-1s) have become highly reliable indicators of ball placement, often showing intent before the quarterback completes his drop.
+The results demonstrate that the modern shift toward pure progression-based passing inadvertently creates new predictive signals. Because offensive timing is so rigid, pre-snap alignment and early post-snap kinematics (0-1s) are highly reliable indicators of ball placement, often showing intent before the quarterback completes his drop.
 
 ### Data 
 The dataset utilized in this study was sourced from the 2026 NFL Big Data Bowl, comprising tracking data from Weeks 1–18 of the 2023–2024 season. The explanation of the features is provided here: https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-prediction/data. The raw data consists of approximately 5 million frame-level samples (recorded at 10 Hz), which were consolidated into a play-centric format. 
@@ -52,7 +51,7 @@ The next sections discuss in which situations the model does well, spotlight tea
 ### Team Based Tendencies based on Route
 I analyzed plays/teams where my prediction model achieved confidence(solved the play/ball location, < 8 yards prediction error, in under 60% of the dropback) versus plays where it remained "Reactive" until close to the throw (avg. 3.00s solution time). Here are the top 3 team + route combinations:
 
-Kansas City GO Route: On average, the model was able to predict ball placement within 8 yards when the targeted receiver was running a Go route in 1.63 seconds after the snap. The model knew within 0.33 seconds after the snap where the ball was going within 4 yards on 50% of those GO routes. This highlights the importance of pre-snap and early post-snap reads, as less emphasis is being placed on them as explain by Kirk Cousins and many others.
+Kansas City GO Route: On average, the model was able to predict ball placement within 8 yards when the targeted receiver was running a Go route in 1.63 seconds after the snap. The model knew within 0.33 seconds after the snap where the ball was going within 4 yards on 50% of all GO routes. This highlights the importance of pre-snap and early post-snap reads, as less emphasis is being placed on them as explain by Kirk Cousins and many others.
 
 Core identity: Kansas City’s confident targeted GO routes show up when:
 - The opposing secondary over-rotates and declares leverage early, especially on the targeted outside receiver
@@ -71,7 +70,7 @@ For example, as seen in Week 2 of Chiefs vs. Jaguars, Mahomes sees the 1-on-1 ma
 <p align="center"><img width="374" height="315" alt="image" src="https://github.com/user-attachments/assets/5f842bcd-ae6c-4aa4-a393-513b9ed87e54" /> <img width="421" height="370" alt="image" src="https://github.com/user-attachments/assets/cabc4ac1-de54-4780-b0b2-697a5bde402e" /></p>
 
 
-Tampa Bay CORNER Route: On average, the model identified the target within 8 yards on 100% of Tampa Bay’s targeted CORNER routes in 1.68 seconds after the snap. The model knew within 0.23 seconds after the snap where the ball was going within 4 yards on 47% of those CORNER routes. This continues to highlight the importance of pre-snap and early post-snap reads.
+Tampa Bay CORNER Route: On average, the model identified the target within 8 yards on 100% of Tampa Bay’s targeted CORNER routes in 1.68 seconds after the snap. The model knew within 0.23 seconds after the snap where the ball was going within 4 yards on 47% of all CORNER routes. This continues to highlight the importance of pre-snap and early post-snap reads.
 
 Core identity: TB’s confident corner routes come when:
 - The opposing flat defender is physically misaligned
@@ -79,7 +78,7 @@ Core identity: TB’s confident corner routes come when:
 - Safeties are stepping into run support or inside zones
 - Targeted Receiver is typically in a tight split and part of either a bunch/stack.
 
-For example, as seen in Week 3 of Eagles vs. Bucs, all parts of TB's Corner route criteria are fulfilled, and the model knows exactly where the ball is going even before Mayfield catches the snap.
+For example, as seen in Week 3 of Eagles vs. Bucs, all parts of TB's main Corner route criteria listed above are fulfilled, and the model knows precisely that the ball is going to Mike Evans on a corner route way before Mayfield catches the snap.
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/d325da62-73ea-44c9-8f8d-b05193a7150a" alt="KC_GO_1" width="600">
@@ -87,7 +86,7 @@ For example, as seen in Week 3 of Eagles vs. Bucs, all parts of TB's Corner rout
 
 <p align="center"><img width="374" height="315" alt="image" src="https://github.com/user-attachments/assets/06831b25-28c4-4548-a256-6a6f96576efd"/> <img width="421" height="370" alt="image" src="https://github.com/user-attachments/assets/04722334-3d74-41c2-8bda-8d27138401f6" /></p>
 
-Arizona ANGLE Route: On average, the model identified ball placement on Arizona’s targeted ANGLE routes within 7.5 yards on 100% of plays in 1.4 seconds. The model knew within 0.39 seconds after the snap where the ball was going within 4.2 yards on 50% of those ANGLE route plays. Once again, the model results show that pre snap/early post snap reads should be given more emphasis as they can predict ball placement in such a manner.
+Arizona ANGLE Route: On average, the model identified ball placement on Arizona’s targeted ANGLE routes within 7.5 yards on 100% of plays in 1.4 seconds. The model knew within 0.39 seconds after the snap where the ball was going within 4.2 yards on 50% of all ANGLE route plays. Once again, the model results show that pre snap/early post snap reads should be given more emphasis as they can predict ball placement in such a manner.
 
 Core identity: ARI’s confident ANGLE routes come when:
 - QB does not scan, he almost immediately commits: The change in absolute orientation from the 80% of the dropback to first frame post-snap, spikes (206.77°), showing a full torso turn.
