@@ -61,7 +61,12 @@ Core identity: Kansas City’s confident targeted GO routes show up when:
 - Second and third-level defenders are compressed laterally and closer to the LOS.
 - Average Point Differential +6.91
 
-As seen in Week 2 of Chiefs vs. Jaguars, Mahomes sees the 1-on-1 matchup between Justin Watson and Tyson Campbell, with a single high safety in between the numbers, he knows he can take a shot. Its 1st down, KC are up 5, and majority of second level defenders are close to the box. The model knows exactly where Mahomes is going with the football, way before he even catches the ball from the snap.
+For example, as seen in Week 2 of Chiefs vs. Jaguars, Mahomes sees the 1-on-1 matchup between Justin Watson and Tyson Campbell, with a single high safety in between the numbers, he knows he can take a shot. Its 1st down, KC are up 5, and majority of second level defenders are close to the box. The model knows exactly where Mahomes is going with the football, way before he even catches the ball from the snap.
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/bdf49496-3fd0-4af8-bd91-dffeead8689c" alt="KC_GO_1" width="600">
+</p>
+
 
 <p align="center"><img width="374" height="315" alt="image" src="https://github.com/user-attachments/assets/5f842bcd-ae6c-4aa4-a393-513b9ed87e54" /> <img width="421" height="370" alt="image" src="https://github.com/user-attachments/assets/cabc4ac1-de54-4780-b0b2-697a5bde402e" /></p>
 
@@ -73,6 +78,12 @@ Core identity: TB’s confident corner routes come when:
 - The defense is over-committed to the run fit and high-low stress concepts.
 - Safeties are stepping into run support or inside zones
 - Targeted Receiver is typically in a tight split and part of either a bunch/stack.
+
+For example, as seen in Week 3 of Eagles vs. Bucs, all parts of TB's Corner route criteria are fulfilled, and the model knows exactly where the ball is going even before Mayfield catches the snap.
+
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/d325da62-73ea-44c9-8f8d-b05193a7150a" alt="KC_GO_1" width="600">
+</p>
 
 <p align="center"><img width="374" height="315" alt="image" src="https://github.com/user-attachments/assets/06831b25-28c4-4548-a256-6a6f96576efd"/> <img width="421" height="370" alt="image" src="https://github.com/user-attachments/assets/04722334-3d74-41c2-8bda-8d27138401f6" /></p>
 
