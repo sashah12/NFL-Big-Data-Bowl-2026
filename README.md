@@ -4,7 +4,7 @@ Sahil Shah, _Data Scientist_
 ### Introduction
 The modern NFL is an environment of extreme information asymmetry. For a defense, preparation is an exhaustive cycle of film study, tendency analysis, and tactical installation designed to minimize the offensive "edge." However, as offensive strategies evolve to become more deceptive,
 the margin for defensive error has narrowed. Traditionally, quarterback play was predicated on coverage identification—reading single-high versus split-safety shells to determine a "side" of the field. 
-As noted by veteran quarterback Kirk Cousins, a fundamental shift occurred as defenses became proficient at disguising these shells. This forced an evolution in offensive coaching toward "pure progressions"—a sequential, timing-based read ($1 \to 2 \to 3 \to 4 \to 5$) that prioritizes internal rhythm
+As noted by veteran quarterback Kirk Cousins in the video below, a fundamental shift occurred as defenses became proficient at disguising these shells. This forced an evolution in offensive coaching toward "pure progressions"—a sequential, timing-based read ($1 \to 2 \to 3 \to 4 \to 5$) that prioritizes internal rhythm
 over defensive reaction. While elite quarterbacks, notably Aaron Rodgers, Matthew Stafford, and Joe Burrow, still utilize hybrid methods—blending pre-snap recognition with rapid post-snap processing—this shift toward standardized movement patterns provides a unique opportunity for machine learning. By analyzing the "battlefield" as a dynamic system of 22 interacting agents,
 we can identify latent patterns in player kinematics that signal a quarterback’s intent before the ball is released.
 
