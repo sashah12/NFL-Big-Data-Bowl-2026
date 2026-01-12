@@ -17,7 +17,7 @@ we can identify latent patterns in player kinematics that signal a quarterback�
 ### Abstract
 This research proposes a predictive framework designed from a defensive perspective to forecast quarterback ball placement during the pre-throw phase of an NFL play. By leveraging high-resolution tracking data, this model aims to assist defensive coaching staffs in quantifying offensive tendencies,
 identifying positional vulnerabilities, and optimizing situational defensive strategies. Using a multi-layer Transformer architecture, the model maps the spatial relationships of all 22 players to output predicted target coordinates ($X, Y$).
-The results demonstrate that, despite the modern shift toward pure progression-based passing, pre-snap alignment and early post-snap kinematics remain highly predictive indicators of ball placement.
+The results demonstrate that the modern shift toward pure progression-based passing inadvertently creates new predictive signals. Because offensive timing is so rigid, pre-snap alignment and early post-snap kinematics (0-1.5s) have become highly reliable indicators of ball placement, often showing intent before the quarterback completes his drop.
 
 ### Data 
 The dataset utilized in this study was sourced from the 2026 NFL Big Data Bowl, comprising tracking data from Weeks 1–18 of the 2023–2024 season. The explanation of the features is provided here: https://www.kaggle.com/competitions/nfl-big-data-bowl-2026-prediction/data. The raw data consists of approximately 5 million frame-level samples (recorded at 10 Hz), which were consolidated into a play-centric format. 
