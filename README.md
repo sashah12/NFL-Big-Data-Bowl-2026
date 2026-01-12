@@ -152,4 +152,4 @@ Hitch/Out/Slant Routes: He consistently has a larger off4_wr_dist_to_sideline wh
 Overall: His def_proximity_at_0.5s is positive, highlighting that early space is the primary tell for his confident targets.
 
 ### Improvements
-I can still improve the model more, focusing more on reducing outliers on long balls as well as switching from a ball placement prediction to the intended target prediction as throw placement can be affected by incompletions in the training data. Intended target is more practical for NFL usage.
+There is still a large opportunity for improvement. The SOTA models utilize years worth of data, player context, and other high resolution data. But with the current data I have, I can still improve the model more, focusing more on reducing outliers on long balls as well as implementing an intended target prediction-throw placement can be affected by incompletions in the training data. Additionally, other model architectures, such as Graph Neural Networks, have shown to be strong and have an opportunity to be explored.
