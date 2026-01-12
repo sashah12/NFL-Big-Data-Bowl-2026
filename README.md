@@ -59,6 +59,7 @@ Core identity: Kansas City’s confident targeted GO routes show up when:
 - Opposing Corner & Linebacker Orientation Is a Massive Tell
 - 73% GO balls on first down
 - Second and third-level defenders are compressed laterally and closer to the LOS.
+- Average Point Differential +6.91
 
 <p align="center"><img width="374" height="315" alt="image" src="https://github.com/user-attachments/assets/5f842bcd-ae6c-4aa4-a393-513b9ed87e54" /> <img width="421" height="370" alt="image" src="https://github.com/user-attachments/assets/cabc4ac1-de54-4780-b0b2-697a5bde402e" /></p>
 
